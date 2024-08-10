@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.natewilliford.rpncalculator.databinding.RpnCalcFragmentBinding;
 
-public class RPNCalcFragment extends Fragment {
+public class RpnCalcFragment extends Fragment {
 
     @Nullable
     private RpnCalcFragmentBinding binding;
