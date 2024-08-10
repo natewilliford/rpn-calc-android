@@ -16,12 +16,37 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:inputType="numberDecimal"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="12dp"
+        android:autofillHints="0.00"/>
 
     <Button
         android:id="@+id/enter_button"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="ENTER" />
+
+    <Button
+        android:id="@+id/plus_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="+" />
+
+    <Button
+        android:id="@+id/minus_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="-" />
+
+    <Button
+        android:id="@+id/multiply_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="*" />
+
+    <Button
+        android:id="@+id/divide_button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="/" />
 
 </LinearLayout>
