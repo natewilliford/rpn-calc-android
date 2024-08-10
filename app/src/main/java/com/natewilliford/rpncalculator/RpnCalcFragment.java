@@ -8,19 +8,26 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.natewilliford.rpncalculator.databinding.RpnCalcFragmentBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+/** The fragment that holds all the calculator interaction. */
+@AndroidEntryPoint
 public class RpnCalcFragment extends Fragment {
 
-    @Nullable
-    private RpnCalcFragmentBinding binding;
+    @Nullable private RpnCalcFragmentBinding binding;
+    @Nullable private RpnCalcFragmentViewModel viewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = RpnCalcFragmentBinding.inflate(getLayoutInflater());
-        binding.resultTextView.setText("Set text from binding");
+        viewModel = new ViewModelProvider(this).get(RpnCalcFragmentViewModel.class);
+        binding.resultTextView.setText(viewModel.getAThing());
+
         return binding.getRoot();
     }
 

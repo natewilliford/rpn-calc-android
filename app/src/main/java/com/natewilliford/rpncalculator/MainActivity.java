@@ -8,6 +8,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+/**
+ * The main entrypoint into the app. This simple app is just a single activity with no need for
+ * complex navigation.
+ */
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     @Override
