@@ -16,8 +16,8 @@ import java.util.Stack;
  * @link <a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">Wikipedia</a>
  */
 public class RpnCalculator {
-
     private static final String TAG = "RpnCalculator";
+    private static final int DEFAULT_STACK_LIMIT = 1000;
 
     /** Supported operators to submit to previously added operands. */
     public enum Operator {
@@ -27,16 +27,42 @@ public class RpnCalculator {
         DIVIDE
     }
 
-    private final Stack<Double> operandsStack = new Stack<>();
+    private final int stackLimit;
+    private final Stack<Double> operandsStack;
 
-    public RpnCalculator() {}
+    private RpnCalculator(int stackLimit, Stack<Double> operandsStack) {
+        this.stackLimit = Math.max(stackLimit, 2);
+        this.operandsStack = operandsStack;
+    }
+
+    public static RpnCalculator Create() {
+        return new RpnCalculator(DEFAULT_STACK_LIMIT, new Stack<>());
+    }
+
+    public static RpnCalculator Create(int stackLimit) {
+        return new RpnCalculator(stackLimit, new Stack<>());
+    }
+
+    public static RpnCalculator Create(int stackLimit, List<Double> operandsStack) {
+        Stack<Double> stack = new Stack<>();
+        for (double val : operandsStack) {
+            stack.push(val);
+        }
+        return new RpnCalculator(stackLimit, stack);
+    }
+
+    public int getStackLimit() { return stackLimit; }
 
     /**
      * Adds an operand (a decimal number) to the stack.
      *
      * @param operand The operand to add.
+     * @throws IllegalStateException when the stack is full.
      */
-    public void addOperand(double operand) {
+    public void addOperand(double operand) throws IllegalStateException {
+        if (operandsStack.size() == stackLimit) {
+            throw new IllegalStateException("Operand stack is full.");
+        }
         operandsStack.push(operand);
     }
 

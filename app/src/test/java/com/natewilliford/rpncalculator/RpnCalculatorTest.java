@@ -3,12 +3,14 @@ package com.natewilliford.rpncalculator;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class RpnCalculatorTest {
@@ -18,7 +20,29 @@ public class RpnCalculatorTest {
 
     @Before
     public void setUp() throws Exception {
-        calc = new RpnCalculator();
+        calc = RpnCalculator.Create();
+    }
+
+    @Test
+    public void create_withStackLimit() {
+        calc = RpnCalculator.Create(3);
+        calc.addOperand(0);
+        calc.addOperand(1);
+        calc.addOperand(2);
+
+        assertEquals(3, calc.getStackLimit());
+        assertThrows(IllegalStateException.class, () -> calc.addOperand(3));
+    }
+
+    @Test
+    public void create_withStack() {
+        calc.addOperand(0);
+        calc.addOperand(1);
+        calc.addOperand(2);
+        Double[] oldStack = calc.getStack().toArray(new Double[0]);
+        RpnCalculator newCalc = RpnCalculator.Create(1000, Arrays.asList(oldStack));
+
+        assertEquals(calc.getStack(), newCalc.getStack());
     }
 
     @Test

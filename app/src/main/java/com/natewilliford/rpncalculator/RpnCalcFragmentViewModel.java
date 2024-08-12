@@ -5,6 +5,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -16,16 +20,23 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class RpnCalcFragmentViewModel extends ViewModel {
 
+    private static final String KEY_CALCULATOR_STACK = "calculator-stack";
+    private static final int STACK_LIMIT = 100;
+
     private final SavedStateHandle savedStateHandle;
     private final RpnCalculator rpnCalculator;
-
     private final MutableLiveData<Double> currentResult;
     private final MutableLiveData<Double> prevResult;
 
     @Inject
     public RpnCalcFragmentViewModel(SavedStateHandle savedStateHandle) {
         this.savedStateHandle = savedStateHandle;
-        rpnCalculator = new RpnCalculator();
+        if (savedStateHandle.contains(KEY_CALCULATOR_STACK)) {
+            Double[] stateStack = savedStateHandle.get(KEY_CALCULATOR_STACK);
+            rpnCalculator = RpnCalculator.Create(STACK_LIMIT, Arrays.asList(stateStack));
+        } else {
+            rpnCalculator = RpnCalculator.Create(STACK_LIMIT);
+        }
         currentResult = new MutableLiveData<>(0.0);
         prevResult = new MutableLiveData<>(0.0);
     }
@@ -41,7 +52,9 @@ public class RpnCalcFragmentViewModel extends ViewModel {
             rpnCalculator.addOperand(value);
             updateResults();
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Not a valid number.");
+            throw new IllegalArgumentException("Not a valid number.", e);
+        } catch (IllegalStateException e) {
+            throw new IllegalArgumentException("Calculator stack is full.", e);
         }
     }
 
@@ -68,6 +81,8 @@ public class RpnCalcFragmentViewModel extends ViewModel {
     }
 
     private void updateResults() {
+        savedStateHandle.set(KEY_CALCULATOR_STACK, rpnCalculator.getStack().toArray(new Double[0]));
+
         currentResult.setValue(rpnCalculator.getLast());
         prevResult.setValue(rpnCalculator.getSecondLast());
     }
