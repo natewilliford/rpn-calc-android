@@ -52,6 +52,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="4dp"
         android:text="@string/enter_button_text"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/input_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/current_value_text" />
@@ -94,6 +95,15 @@
         style="@style/CalcButtonEnd"
         android:text="@string/divide_button_text"
         app:layout_constraintTop_toBottomOf="@id/minus_button"
+        app:layout_constraintStart_toStartOf="@id/half_vert_guideline"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/clear_button"
+        style="@style/CalcButtonEnd"
+        android:text="@string/clear_button_text"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/divide_button"
         app:layout_constraintStart_toStartOf="@id/half_vert_guideline"
         app:layout_constraintEnd_toEndOf="parent" />
 

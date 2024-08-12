@@ -105,4 +105,9 @@ public class RpnCalculator {
         }
         return 0;
     }
+
+    /** Resets the state of the calculator */
+    public void clear() {
+        operandsStack.clear();
+    }
 }

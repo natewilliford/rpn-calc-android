@@ -2,6 +2,8 @@ package com.natewilliford.rpncalculator;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -161,5 +163,15 @@ public class RpnCalculatorTest {
         // Add a value, but there still isn't a second to last.
         calc.addOperand(3);
         assertEquals(0, calc.getSecondLast(), DECIMAL_DELTA);
+    }
+
+    @Test
+    public void clear_resets() {
+        calc.addOperand(3);
+        calc.addOperand(4);
+        assertFalse(calc.getStack().isEmpty());
+
+        calc.clear();
+        assertTrue(calc.getStack().isEmpty());
     }
 }

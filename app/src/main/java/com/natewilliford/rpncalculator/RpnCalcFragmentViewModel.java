@@ -62,6 +62,11 @@ public class RpnCalcFragmentViewModel extends ViewModel {
         return prevResult;
     }
 
+    public void clearCalculator() {
+        rpnCalculator.clear();
+        updateResults();
+    }
+
     private void updateResults() {
         currentResult.setValue(rpnCalculator.getLast());
         prevResult.setValue(rpnCalculator.getSecondLast());
