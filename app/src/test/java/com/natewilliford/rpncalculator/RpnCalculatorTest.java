@@ -125,12 +125,41 @@ public class RpnCalculatorTest {
     }
 
     @Test
-    public void getLastResult_getsLast() {
+    public void getLast_getsLast() {
         calc.addOperand(3);
         calc.addOperand(4);
         assertEquals(4, calc.getLast(), DECIMAL_DELTA);
 
         calc.submitOperator(RpnCalculator.Operator.PLUS);
         assertEquals(7, calc.getLast(), DECIMAL_DELTA);
+    }
+
+    @Test
+    public void getLast_emptyStack() {
+        // Don't add any operands.
+        assertEquals(0, calc.getLast(), DECIMAL_DELTA);
+    }
+
+    @Test
+    public void getSecondLast_getsValue() {
+        calc.addOperand(3);
+        calc.addOperand(4);
+        assertEquals(3, calc.getSecondLast(), DECIMAL_DELTA);
+
+        calc.addOperand(8);
+        assertEquals(4, calc.getSecondLast(), DECIMAL_DELTA);
+
+        calc.submitOperator(RpnCalculator.Operator.PLUS);
+        assertEquals(3, calc.getSecondLast(), DECIMAL_DELTA);
+    }
+
+    @Test
+    public void getSecondLast_noSecondLast() {
+        // Don't add any operands.
+        assertEquals(0, calc.getSecondLast(), DECIMAL_DELTA);
+
+        // Add a value, but there still isn't a second to last.
+        calc.addOperand(3);
+        assertEquals(0, calc.getSecondLast(), DECIMAL_DELTA);
     }
 }

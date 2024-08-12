@@ -44,13 +44,13 @@ public class RpnCalculator {
      * Submits an operator to do a calculation. Takes the last two operands in the stack and applies
      * the operation to them, then adds the result back to the stack.
      *
-     * @param op The operator to apply.
+     * @param operator The operator to apply.
      * @return The result of the operation.
      */
-    public double submitOperator(Operator op) {
+    public double submitOperator(Operator operator) {
         if (operandsStack.size() < 2) {
             // TODO: Add better error handling.
-            Log.e(TAG, "Not enough operators");
+            Log.e(TAG, "Not enough operands");
             return 0;
         }
 
@@ -58,7 +58,7 @@ public class RpnCalculator {
         double secondLast = operandsStack.pop();
         double result = 0;
 
-        switch (op) {
+        switch (operator) {
             case PLUS:
                 result = secondLast + last;
                 break;
@@ -72,7 +72,7 @@ public class RpnCalculator {
                 result = secondLast / last;
                 break;
             default:
-                Log.e(TAG, "Invalid operator " + op);
+                Log.e(TAG, "Invalid operator " + operator);
         }
 
         operandsStack.push(result);
@@ -89,6 +89,20 @@ public class RpnCalculator {
      * of the last operation.
      */
     public double getLast() {
+        if (operandsStack.isEmpty()) {
+            return 0;
+        }
         return operandsStack.peek();
+    }
+
+    /**
+     * Gets the second to last item in the stack. This is a convenience method as alternative to
+     * getting the whole stack.
+     */
+    public double getSecondLast() {
+        if (operandsStack.size() >= 2) {
+            return operandsStack.get(operandsStack.size() - 2);
+        }
+        return 0;
     }
 }

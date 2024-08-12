@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">RPNCalculator</string>
+    <string name="value_input_hint">Enter a number</string>
+    <string name="enter_button_text">ENTER</string>
+    <string name="plus_button_text">+</string>
+    <string name="minus_button_text">-</string>
+    <string name="multiply_button_text">*</string>
+    <string name="divide_button_text">/</string>
 </resources>
