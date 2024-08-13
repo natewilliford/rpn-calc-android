@@ -36,6 +36,8 @@ I did error handling entirely using exceptions. Part of my reasoning is that con
 
 Unit tests of the core calculator logic are included, but I would also probably include Robolectric tests of the ViewModel and maybe Fragment as well if I were to maintain this project going forward. Dagger/Hilt would have helped with that.
 
+The scaling and large-screen responsiveness could be improved. To save time, I restricted to portrait mode only.
+
 ## How to Run
 
 Built using AndroidStudio 2023.2.1 with target sdk 34. Any newish version of AS should work.
