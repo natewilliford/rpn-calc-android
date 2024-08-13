@@ -190,6 +190,16 @@ public class RpnCalculatorTest {
     }
 
     @Test
+    public void deleteLast_deletes() {
+        calc.addOperand(3);
+        calc.addOperand(4);
+        assertEquals(2, calc.getStack().size());
+
+        calc.deleteLast();
+        assertEquals(1, calc.getStack().size());
+    }
+
+    @Test
     public void clear_resets() {
         calc.addOperand(3);
         calc.addOperand(4);

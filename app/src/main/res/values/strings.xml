@@ -7,4 +7,5 @@
     <string name="multiply_button_text">*</string>
     <string name="divide_button_text">/</string>
     <string name="clear_button_text">CLEAR</string>
+    <string name="delete_button_text">DEL</string>
 </resources>

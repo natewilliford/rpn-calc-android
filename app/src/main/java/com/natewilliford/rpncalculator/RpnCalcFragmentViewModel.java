@@ -68,11 +68,13 @@ public class RpnCalcFragmentViewModel extends ViewModel {
      * Returns live data that can be observed. This is updated whenever a new result is calculated
      * via {@link #enterNumber(String)} or {@link #submitOperator(RpnCalculator.Operator)}.
      **/
-    public LiveData<Double> getCurrentResult() {
-        return currentResult;
-    }
-    public LiveData<Double> getPrevResult() {
-        return prevResult;
+    public LiveData<Double> getCurrentResult() { return currentResult; }
+
+    public LiveData<Double> getPrevResult() { return prevResult; }
+
+    public void deleteLast() {
+        rpnCalculator.deleteLast();
+        updateResults();
     }
 
     public void clearCalculator() {

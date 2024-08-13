@@ -132,6 +132,13 @@ public class RpnCalculator {
         return 0;
     }
 
+    /** Deletes the last item in the stack. */
+    public void deleteLast() {
+        if (!operandsStack.isEmpty()) {
+            operandsStack.pop();
+        }
+    }
+
     /** Resets the state of the calculator */
     public void clear() {
         operandsStack.clear();

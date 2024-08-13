@@ -44,6 +44,7 @@ public class RpnCalcFragment extends Fragment {
         binding.minusButton.setOnClickListener(v -> viewModel.submitOperator(Operator.MINUS));
         binding.multiplyButton.setOnClickListener(v -> viewModel.submitOperator(Operator.MULTIPLY));
         binding.divideButton.setOnClickListener(v -> viewModel.submitOperator(Operator.DIVIDE));
+        binding.deleteButton.setOnClickListener(v -> viewModel.deleteLast());
         binding.clearButton.setOnClickListener(v -> viewModel.clearCalculator());
 
         return binding.getRoot();
