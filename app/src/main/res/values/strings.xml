@@ -8,4 +8,8 @@
     <string name="divide_button_text">/</string>
     <string name="clear_button_text">CLEAR</string>
     <string name="delete_button_text">DEL</string>
+    <string name="error_message_empty_input">Input a number to enter.</string>
+    <string name="error_message_failed_parse">Not a valid number.</string>
+    <string name="error_message_stack_full">Calculator stack is full.</string>
+    <string name="error_message_not_enough_operands">You need 2 numbers to do an operation.</string>
 </resources>

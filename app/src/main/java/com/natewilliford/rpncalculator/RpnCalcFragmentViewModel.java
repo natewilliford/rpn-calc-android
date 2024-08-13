@@ -1,13 +1,11 @@
 package com.natewilliford.rpncalculator;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class RpnCalcFragmentViewModel extends ViewModel {
 
+    private static final String TAG = "RpnCalcFragmentViewModel";
     private static final String KEY_CALCULATOR_STACK = "calculator-stack";
     private static final int STACK_LIMIT = 100;
 
@@ -31,35 +30,37 @@ public class RpnCalcFragmentViewModel extends ViewModel {
     @Inject
     public RpnCalcFragmentViewModel(SavedStateHandle savedStateHandle) {
         this.savedStateHandle = savedStateHandle;
+        Double[] savedStack = null;
         if (savedStateHandle.contains(KEY_CALCULATOR_STACK)) {
-            Double[] stateStack = savedStateHandle.get(KEY_CALCULATOR_STACK);
-            rpnCalculator = RpnCalculator.Create(STACK_LIMIT, Arrays.asList(stateStack));
-        } else {
-            rpnCalculator = RpnCalculator.Create(STACK_LIMIT);
+            Log.i(TAG, "Restoring from saved state.");
+            savedStack = savedStateHandle.get(KEY_CALCULATOR_STACK);
         }
-        currentResult = new MutableLiveData<>(0.0);
-        prevResult = new MutableLiveData<>(0.0);
+
+        rpnCalculator = RpnCalculator.Create(STACK_LIMIT, savedStack);
+        currentResult = new MutableLiveData<>(rpnCalculator.getLast());
+        prevResult = new MutableLiveData<>(rpnCalculator.getSecondLast());
     }
 
     /**
      * Enters a new value into the calculator.
      *
-     * @throws IllegalArgumentException when number fails to parse as a double.
+     * @throws NumberFormatException when number fails to parse as a double.
+     * @throws IllegalStateException when the calculator stack is full.
      **/
-    public void enterNumber(String numberString) throws IllegalArgumentException {
-        try {
-            double value = Double.parseDouble(numberString);
-            rpnCalculator.addOperand(value);
-            updateResults();
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Not a valid number.", e);
-        } catch (IllegalStateException e) {
-            throw new IllegalArgumentException("Calculator stack is full.", e);
-        }
+    public void enterNumber(String numberString) throws NumberFormatException,
+            IllegalStateException {
+        // Bubble up exceptions so the UI can handle errors.
+        double value = Double.parseDouble(numberString);
+        rpnCalculator.addOperand(value);
+        updateResults();
     }
 
-    /** Submits an operation to be done on previously entered numbers. **/
-    public void submitOperator(RpnCalculator.Operator operator) {
+    /**
+     * Submits an operation to be done on previously entered numbers.
+     *
+     * @throws IllegalStateException when there aren't enough operands.
+     **/
+    public void submitOperator(RpnCalculator.Operator operator) throws IllegalStateException {
         rpnCalculator.submitOperator(operator);
         updateResults();
     }
@@ -84,7 +85,6 @@ public class RpnCalcFragmentViewModel extends ViewModel {
 
     private void updateResults() {
         savedStateHandle.set(KEY_CALCULATOR_STACK, rpnCalculator.getStack().toArray(new Double[0]));
-
         currentResult.setValue(rpnCalculator.getLast());
         prevResult.setValue(rpnCalculator.getSecondLast());
     }

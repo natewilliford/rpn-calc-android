@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 public class RpnCalculatorTest {
@@ -25,12 +24,11 @@ public class RpnCalculatorTest {
 
     @Test
     public void create_withStackLimit() {
-        calc = RpnCalculator.Create(3);
+        calc = RpnCalculator.Create(3, null);
         calc.addOperand(0);
         calc.addOperand(1);
         calc.addOperand(2);
 
-        assertEquals(3, calc.getStackLimit());
         assertThrows(IllegalStateException.class, () -> calc.addOperand(3));
     }
 
@@ -40,7 +38,7 @@ public class RpnCalculatorTest {
         calc.addOperand(1);
         calc.addOperand(2);
         Double[] oldStack = calc.getStack().toArray(new Double[0]);
-        RpnCalculator newCalc = RpnCalculator.Create(1000, Arrays.asList(oldStack));
+        RpnCalculator newCalc = RpnCalculator.Create(1000, oldStack);
 
         assertEquals(calc.getStack(), newCalc.getStack());
     }
@@ -148,6 +146,18 @@ public class RpnCalculatorTest {
         assertEquals(8, calc.getLast(), DECIMAL_DELTA);
         calc.submitOperator(RpnCalculator.Operator.DIVIDE);
         assertEquals(0.625, calc.getLast(), DECIMAL_DELTA);
+    }
+
+    @Test
+    public void submitOperator_throwsWhenNotEnoughOperands() {
+        assertThrows(IllegalStateException.class, () ->
+                calc.submitOperator(RpnCalculator.Operator.MULTIPLY));
+        calc.addOperand(3);
+        assertThrows(IllegalStateException.class, () ->
+                calc.submitOperator(RpnCalculator.Operator.MULTIPLY));
+        calc.addOperand(4);
+        // Shouldn't throw now that there are enough
+        calc.submitOperator(RpnCalculator.Operator.MULTIPLY);
     }
 
     @Test

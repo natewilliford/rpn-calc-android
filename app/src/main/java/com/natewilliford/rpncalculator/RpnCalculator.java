@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.annotation.Nullable;
+
 /**
  * A Reverse Polish notation calculator. This class manages the operations and state of an RPN
  * calculator where an operator is entered after several operands have been entered. This means a
@@ -35,23 +37,26 @@ public class RpnCalculator {
         this.operandsStack = operandsStack;
     }
 
+    /** Creates a new calculator with the default stack limit. */
     public static RpnCalculator Create() {
         return new RpnCalculator(DEFAULT_STACK_LIMIT, new Stack<>());
     }
 
-    public static RpnCalculator Create(int stackLimit) {
-        return new RpnCalculator(stackLimit, new Stack<>());
-    }
-
-    public static RpnCalculator Create(int stackLimit, List<Double> operandsStack) {
+    /**
+     * Creates a new calculator with an existing stack history.
+     *
+     * @param stackLimit The highest number of operands the calculator can store.
+     * @param operandsStack The existing stack as a list of Doubles.
+     */
+    public static RpnCalculator Create(int stackLimit, @Nullable Double[] operandsStack) {
         Stack<Double> stack = new Stack<>();
-        for (double val : operandsStack) {
-            stack.push(val);
+        if (operandsStack != null) {
+            for (double val : operandsStack) {
+                stack.push(val);
+            }
         }
         return new RpnCalculator(stackLimit, stack);
     }
-
-    public int getStackLimit() { return stackLimit; }
 
     /**
      * Adds an operand (a decimal number) to the stack.
@@ -72,18 +77,16 @@ public class RpnCalculator {
      *
      * @param operator The operator to apply.
      * @return The result of the operation.
+     * @throws IllegalStateException when there are not enough operands to do the operation.
      */
-    public double submitOperator(Operator operator) {
+    public double submitOperator(Operator operator) throws IllegalStateException {
         if (operandsStack.size() < 2) {
-            // TODO: Add better error handling.
-            Log.e(TAG, "Not enough operands");
-            return 0;
+            throw new IllegalStateException("Not enough operands to do the operation.");
         }
 
         double last = operandsStack.pop();
         double secondLast = operandsStack.pop();
         double result = 0;
-
         switch (operator) {
             case PLUS:
                 result = secondLast + last;
@@ -98,9 +101,9 @@ public class RpnCalculator {
                 result = secondLast / last;
                 break;
             default:
+                // Should not be possible unless new operators are added.
                 Log.e(TAG, "Invalid operator " + operator);
         }
-
         operandsStack.push(result);
         return result;
     }
